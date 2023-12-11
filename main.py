@@ -79,8 +79,6 @@ class calculation():
                 pymixer.music.stop()
             
 
-
-
 class capture_video():
     def __init__(self):
         # Choose Camera
@@ -126,5 +124,4 @@ class main:
         self.video.stop_capture()
 
 if __name__ == "__main__":
-    app = main()
-    app.run()
+    main().run()
