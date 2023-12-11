@@ -5,6 +5,8 @@ from scipy.spatial import distance
 from pygame import mixer as pymixer
 import paremeter as pm
 import time
+import tkinter as tk
+import PIL.Image, PIL.ImageTk
 
 class draw:
     def __init__(self):
@@ -79,8 +81,8 @@ class calculation():
                 pymixer.music.stop()
             
 
-class capture_video():
-    def __init__(self):
+class capture_video:
+    def __init__(self, window):
         # Choose Camera
         self.cap = cv2.VideoCapture(0)
         # Load Alarm .wav
@@ -92,36 +94,46 @@ class capture_video():
         
         self.cal = calculation()
 
-    def stop_capture(self):
-        if hasattr(self, 'cap'):
-            self.cap.release()
-        cv2.destroyAllWindows()
-
 
     def start_capture(self):
-        while True:
-            _, self.frame = self.cap.read()
-            self.height, self.width, _ = self.frame.shape
-            frameRGB = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
-            result = self.face_mesh.process(frameRGB)
+        # while True:
+        self.ret, self.frame = self.cap.read()
+        self.height, self.width, _ = self.frame.shape
+        frameRGB = cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)
+        result = self.face_mesh.process(frameRGB)
 
-            self.cal.calculating(result,self.width,self.height,self.frame)
-              
-            cv2.imshow(pm.title, self.frame)
+        self.cal.calculating(result,self.width,self.height,self.frame)
             
-            # Press "Esc" to Close Apllication
-            key = cv2.waitKey(1)
-            if key == 27:
-                pymixer.music.stop()  
-                break
-                
-class main:
-    def __init__(self):
-        self.video = capture_video()
 
-    def run(self):
-        self.video.start_capture()
-        self.video.stop_capture()
+class Menu(capture_video):
+    def Menu(self, window):
+        self.window = window
+        self.window.title(pm.title)
+
+        # Create a canvas that can fit the video source
+        self.canvas = tk.Canvas(window, width=self.cap.get(cv2.CAP_PROP_FRAME_WIDTH), height=self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        self.canvas.pack()
+
+        # Button to start/stop the video
+        self.btn_snapshot = tk.Button(window, text="Exit to Menu", width=50, command=None)
+        self.btn_snapshot.pack(anchor=tk.CENTER, expand=True)
+
+
+        self.delay = 10  
+        self.update()
+
+        self.window.mainloop()
+
+    def update(self):
+        # # Get a frame from the video source
+        # ret, frame = self.cap.read()
+        self.start_capture()
+        if self.ret:
+            self.photo = PIL.ImageTk.PhotoImage(image=PIL.Image.fromarray(cv2.cvtColor(self.frame, cv2.COLOR_BGR2RGB)))
+            self.canvas.create_image(0, 0, image=self.photo, anchor=tk.NW)
+
+        self.window.after(self.delay, self.update)
 
 if __name__ == "__main__":
-    main().run()
+    root = tk.Tk()
+    app = Menu(root).Menu(root)
