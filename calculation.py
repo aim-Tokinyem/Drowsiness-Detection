@@ -1,5 +1,5 @@
 from scipy.spatial import distance
-import paremeter as pm
+import parameter as pm
 import cv2
 from pygame import mixer as pymixer
 from draw import draw

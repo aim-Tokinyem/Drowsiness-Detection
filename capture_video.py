@@ -1,5 +1,5 @@
 from pygame import mixer as pymixer
-import paremeter as pm
+import parameter as pm
 import mediapipe as mp
 import cv2
 from calculation import calculation

@@ -1,6 +1,6 @@
 # Import Library
 import cv2
-import paremeter as pm
+import parameter as pm
 import tkinter as tk
 import PIL.Image, PIL.ImageTk
 from capture_video import capture_video
@@ -16,9 +16,8 @@ class Menu(capture_video):
         self.canvas.pack()
 
         # Button to start/stop the video
-        self.btn_snapshot = tk.Button(window, text="Exit to Menu", width=50, command=None)
+        self.btn_snapshot = tk.Button(window, text="Exit", width=50, command=self.stop_program)
         self.btn_snapshot.pack(anchor=tk.CENTER, expand=True)
-
 
         self.delay = 10  
         self.update()
@@ -33,6 +32,10 @@ class Menu(capture_video):
             self.canvas.create_image(0, 0, image=self.photo, anchor=tk.NW)
 
         self.window.after(self.delay, self.update)
+
+    # Function to stop the program
+    def stop_program(self):
+        root.destroy()
 
 if __name__ == "__main__":
     root = tk.Tk()
