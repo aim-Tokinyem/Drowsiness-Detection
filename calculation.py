@@ -51,7 +51,7 @@ class calculation():
             if EAR <= pm.validate_EAR:
                 self.COUNTER += 1
                 if self.COUNTER >= pm.validate_counter :
-                    self.draw.draw_text(f"Drowsiness Detected ", frame, pm.alert_position, pm.alert_bg_text_color, pm.alert_text_color)
+                    self.draw.draw_text("Drowsiness Detected ", frame, pm.alert_position, pm.alert_bg_text_color, pm.alert_text_color)
                     pymixer.music.play(-1)
 
             else:
